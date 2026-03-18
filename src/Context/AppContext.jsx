@@ -10,6 +10,7 @@ const AppContext = createContext();
 /** Defailt initial states declare here */
 const InitialState = {
   residents: dbFile.residents,
+  maintenance: dbFile.maintenance,
   activeSection: "Dashboard",
 };
 
@@ -36,6 +37,9 @@ function reducer(state, action) {
         ...state,
         residents: state.residents.filter((res) => res.id !== action.payload),
       };
+    }
+    case "ADD_MAINENANCE": {
+      return { ...state, maintenance: [action.payload, ...state.payload] };
     }
     default:
       return state;

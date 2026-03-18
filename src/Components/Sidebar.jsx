@@ -35,7 +35,7 @@ const Sidebar = () => {
       iconLi: (
         <>
           <GrVmMaintenance />
-          <span>Maintenance</span>
+          <span>Maintenance Requests</span>
         </>
       ),
     },

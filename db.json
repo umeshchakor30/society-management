@@ -276,5 +276,27 @@
       "email": "priya@email.com"
     }
   ],
+  "maintenance": [
+    {
+      "id": "1",
+      "issue": "Water shortage",
+      "category": "Plumbing",
+      "location": "B-403",
+      "reported": "Mamta",
+      "date": "2026-03-16",
+      "priority": "High",
+      "status": "Open"
+    },
+    {
+      "id": "2",
+      "issue": "Water shortage",
+      "category": "Plumbing",
+      "location": "B-403",
+      "reported": "Mamta",
+      "date": "2026-03-16",
+      "priority": "High",
+      "status": "Open"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

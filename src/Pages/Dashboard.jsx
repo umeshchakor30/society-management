@@ -44,8 +44,8 @@ const Dashboard = () => {
       // width: total > 0 ? `${(owners / total) * 100}%` : "0%",
     },
     {
-      label: "Inactive/Pending",
-      value: inactiveMembers,
+      label: "Tenants",
+      value: tenants,
       icon: <FaUserClock />,
       color: "bg-rose-600",
       text: "text-rose-600",
@@ -55,29 +55,63 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {stats.map((stat, i) => (
-        <div
-          key={i}
-          className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500">{stat.label}</p>
-              <h3 className="text-2xl font-bold text-gray-900 mt-1">
-                {stat.value}
-              </h3>
-            </div>
-            <div className={`p-3 rounded-xl ${stat.bg} ${stat.text} text-xl`}>
-              {stat.icon}
-            </div>
-          </div>
-          {/* Progress bar for visual flavor */}
-          <div className="mt-4 w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
-            {/* <div className={`${stat.color} h-full w-2/3 opacity-80`} /> */}
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
+      <div className="max-w-6xl mx-auto mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-zinc-950 sm:text-3xl">
+              Residents
+            </h1>
           </div>
         </div>
-      ))}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {stats.map((stat, i) => (
+          <div
+            key={i}
+            className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">
+                  {stat.label}
+                </p>
+                <h3 className="text-2xl font-bold text-gray-900 mt-1">
+                  {stat.value}
+                </h3>
+              </div>
+              <div className={`p-3 rounded-xl ${stat.bg} ${stat.text} text-xl`}>
+                {stat.icon}
+              </div>
+            </div>
+            {/* Progress bar for visual flavor */}
+            <div className="mt-4 w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+              {/* <div className={`${stat.color} h-full w-2/3 opacity-80`} /> */}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="max-w-6xl mx-auto mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-zinc-950 sm:text-3xl">
+              Maitenance Requests
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-zinc-950 sm:text-3xl">
+              Bills & Payments
+            </h1>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
