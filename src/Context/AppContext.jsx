@@ -22,6 +22,21 @@ function reducer(state, action) {
     case "ADD_RESIDENTIAL": {
       return { ...state, residents: [action.payload, ...state.residents] };
     }
+    case "UPDATE_RESIDENTIAL": {
+      return {
+        ...state,
+        residents: state.residents.map((res) =>
+          // Use == (loose equality) to handle string/number ID mismatches
+          res.id == action.payload.id ? action.payload : res,
+        ),
+      };
+    }
+    case "DELETE_RESIDENTIAL": {
+      return {
+        ...state,
+        residents: state.residents.filter((res) => res.id !== action.payload),
+      };
+    }
     default:
       return state;
   }

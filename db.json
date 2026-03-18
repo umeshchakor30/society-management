@@ -1,48 +1,15 @@
 {
   "residents": [
     {
-      "id": "1",
-      "name": "Priya Mehta JSON",
-      "flat": "B-403",
+      "id": "3",
+      "name": "Rajesh Kumar Mumbai Wale",
+      "flat": "A-101",
       "block": "B",
       "type": "Owner",
-      "phone": "98201 45678",
-      "members": 3,
-      "status": "dues_pending",
-      "email": "priya@email.com"
-    },
-    {
-      "id": "2",
-      "name": "Anil Sharma",
-      "flat": "C-201",
-      "block": "C",
-      "type": "Owner",
-      "phone": "99112 33445",
-      "members": 4,
-      "status": "active",
-      "email": "anil@email.com"
-    },
-    {
-      "id": "3",
-      "name": "Rajesh Kumar",
-      "flat": "A-101",
-      "block": "A",
-      "type": "Tenant",
-      "phone": "87654 12309",
+      "phone": "8765412309",
       "members": 2,
-      "status": "active",
+      "status": "Active",
       "email": "rajesh@email.com"
-    },
-    {
-      "id": "4",
-      "name": "Sunita Joshi",
-      "flat": "D-302",
-      "block": "D",
-      "type": "Owner",
-      "phone": "94551 67890",
-      "members": 5,
-      "status": "overdue",
-      "email": "sunita@email.com"
     },
     {
       "id": "5",
@@ -54,17 +21,6 @@
       "members": 2,
       "status": "active",
       "email": "vikram@email.com"
-    },
-    {
-      "id": "6",
-      "name": "Kavita Patel",
-      "flat": "C-405",
-      "block": "C",
-      "type": "Owner",
-      "phone": "98765 43210",
-      "members": 3,
-      "status": "dues_pending",
-      "email": "kavita@email.com"
     },
     {
       "id": "7",
@@ -186,6 +142,138 @@
       "email": "snehay@gmail.com",
       "members": "2",
       "status": "Inactive"
+    },
+    {
+      "id": "a02c",
+      "name": "Sneha Yadav",
+      "flat": "45",
+      "block": "A",
+      "type": "Tenant",
+      "phone": "8045123566",
+      "email": "snehay@gmail.com",
+      "members": "2",
+      "status": "Inactive"
+    },
+    {
+      "id": "1",
+      "name": "Priya Mehta JSON",
+      "flat": "B-403",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9820145678",
+      "members": 3,
+      "status": "dues_pending",
+      "email": "priya@email.com"
+    },
+    {
+      "id": "2",
+      "name": "Anil Sharma",
+      "flat": "C-201",
+      "block": "A",
+      "type": "Owner",
+      "phone": "9911234455",
+      "members": 4,
+      "status": "Active",
+      "email": "anil@email.com"
+    },
+    {
+      "id": "1",
+      "name": "Priya Mehta JSON DATA",
+      "flat": "B-403",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9820145678",
+      "members": 3,
+      "status": "Active",
+      "email": "priya@email.com"
+    },
+    {
+      "id": "2",
+      "name": "Anil Sharma Nashik",
+      "flat": "C-201",
+      "block": "A",
+      "type": "Owner",
+      "phone": "9911233445",
+      "members": 4,
+      "status": "Active",
+      "email": "anil@email.com"
+    },
+    {
+      "id": "1",
+      "name": "Priya Mehta JSON Nashik",
+      "flat": "B-403",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9820145678",
+      "members": 3,
+      "status": "Active",
+      "email": "priya@email.com"
+    },
+    {
+      "id": "1",
+      "name": "Priya Mehta JSON",
+      "flat": "B-403",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9820145678",
+      "members": 3,
+      "status": "Active",
+      "email": "priya@email.com"
+    },
+    {
+      "id": "1",
+      "name": "Priya Mehta JSON",
+      "flat": "B-403",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9820145678",
+      "members": 3,
+      "status": "Active",
+      "email": "priya@email.com"
+    },
+    {
+      "id": "4",
+      "name": "Sunita Joshi",
+      "flat": "D-302",
+      "block": "A",
+      "type": "Owner",
+      "phone": "9455167890",
+      "members": 5,
+      "status": "Active",
+      "email": "sunita@email.com"
+    },
+    {
+      "id": "1",
+      "name": "Priya Mehta JSON",
+      "flat": "B-403",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9820145678",
+      "members": 3,
+      "status": "Active",
+      "email": "priya@email.com"
+    },
+    {
+      "id": "1",
+      "name": "Priya Mehta JSON Nashik",
+      "flat": "B-403",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9820145678",
+      "members": 3,
+      "status": "Active",
+      "email": "priya@email.com"
+    },
+    {
+      "id": "1",
+      "name": "Priya Mehta JSON Nashik",
+      "flat": "B-403",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9820145678",
+      "members": 3,
+      "status": "Active",
+      "email": "priya@email.com"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

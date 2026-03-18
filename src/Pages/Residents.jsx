@@ -5,6 +5,8 @@ import { useApp } from "../Context/AppContext";
 import { MdOutlineEmail } from "react-icons/md";
 import { CiMobile1 } from "react-icons/ci";
 import toast from "react-hot-toast";
+import { FaUserEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const emptyFormData = {
   name: "",
@@ -46,15 +48,16 @@ const Residents = () => {
   const [isSubmitting, isSetSubmittig] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [editResident, setEditResident] = useState(null);
+  const [deleteResident, setDeleteResident] = useState();
 
   const handlePopup = (action) => {
     setModel(action);
+    setEditResident(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("Before Submit ", form);
     if (
       !form.name ||
       !form.flat ||
@@ -81,33 +84,51 @@ const Residents = () => {
     }
 
     isSetSubmittig(true);
-    const loadingToast = toast.loading("Adding resident...");
+    const loadingToast = toast.loading(
+      editResident ? "Updating resident..." : "Adding resident...",
+    );
     try {
-      const response = await fetch(
-        "http://localhost:5000/residents?_sort=id&_order=desc",
-        {
-          method: "post",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        },
-      );
+      let url = "http://localhost:5000/residents";
+      let method = "POST";
+
+      if (editResident) {
+        url = `${url}/${editResident}`;
+        method = "PUT";
+      }
+
+      const response = await fetch(url, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
       if (response.ok) {
-        dispatch({
-          type: "ADD_RESIDENTIAL",
-          payload: { ...form, id: Date.now() },
-        });
+        if (editResident) {
+          dispatch({
+            type: "UPDATE_RESIDENTIAL",
+            payload: { ...form, id: editResident },
+          });
+        } else {
+          const newData = await response.json();
+          dispatch({ type: "ADD_RESIDENTIAL", payload: newData });
+        }
         toast.dismiss(loadingToast);
-        toast.success("Resident added successfully!");
+
+        toast.success(
+          editResident
+            ? "Resident updated successfully!"
+            : "Resident added successfully!",
+        );
 
         setTimeout(() => {
           setForm(emptyFormData);
           setModel(false);
-        }, 4000);
+        }, 5000);
       }
     } catch (error) {
       toast.error("Something went wrong!", { id: loadingToast });
     } finally {
-      isSubmitting(false);
+      isSetSubmittig(false);
     }
   };
 
@@ -129,7 +150,8 @@ const Residents = () => {
     const search = searchTerm.toLowerCase();
     return (
       res.name?.toLowerCase().includes(search) ||
-      res.flat?.toLowerCase().includes(search)
+      res.flat?.toLowerCase().includes(search) ||
+      res.phone?.toLowerCase().includes(search)
     );
   });
 
@@ -140,10 +162,32 @@ const Residents = () => {
   };
 
   const handleEdit = (res) => {
-    console.log(res);
-
+    //console.log("res ==>> ", res.id);
+    setEditResident(res.id);
     setForm({ ...res });
     setModel(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to remove this resident?"))
+      return;
+
+    const loadingToast = toast.loading("Deleting resident...");
+
+    try {
+      const response = await fetch(`http://localhost:5000/residents/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        dispatch({ type: "DELETE_RESIDENTIAL", payload: id });
+        toast.success("Resident removed successfully!", { id: loadingToast });
+      } else {
+        throw new Error("Failed to delete");
+      }
+    } catch (error) {
+      toast.error("Could not delete from server", { id: loadingToast });
+    }
   };
 
   return (
@@ -229,7 +273,7 @@ const Residents = () => {
                 {filterResidensts.map((res, index) => (
                   <tr
                     className="hover:bg-gray-50/50 transition-colors"
-                    key={res.id || index}
+                    key={res.id + index}
                   >
                     {/* 1. Full Name & Contact */}
                     <td className="px-6 py-4">
@@ -297,15 +341,26 @@ const Residents = () => {
                         {res.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      {" "}
-                      <button
-                        className="cursor-pointer"
-                        onClick={() => handleEdit(res)}
-                      >
-                        Edit
-                      </button>{" "}
-                      / Delete
+                    <td className="px-6 py-4">
+                      <div className="flex items-center justify-end gap-3">
+                        {/* Edit Button */}
+                        <button
+                          title="Edit Resident"
+                          className="p-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200 cursor-pointer shadow-sm"
+                          onClick={() => handleEdit(res)}
+                        >
+                          <FaUserEdit size={18} />
+                        </button>
+
+                        {/* Delete Button */}
+                        <button
+                          title="Delete Resident"
+                          className="p-2 text-red-600 bg-red-50 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-200 cursor-pointer shadow-sm"
+                          onClick={() => handleDelete(res.id)} // Assuming you have a delete handler
+                        >
+                          <MdDelete size={18} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -326,7 +381,7 @@ const Residents = () => {
             <div className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
               <div className="flex items-center justify-between px-8 py-6">
                 <h3 className="text-xl font-semibold text-gray-800">
-                  Add Resident
+                  {editResident ? "Edit Resident" : "Add Resident"}
                 </h3>
                 <button
                   className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors cursor-pointer"
@@ -488,7 +543,12 @@ const Residents = () => {
                     {isSubmitting && (
                       <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                     )}
-                    {isSubmitting ? "Adding..." : "Add Resident"}
+
+                    {isSubmitting
+                      ? "Processing..."
+                      : editResident
+                        ? "Edit Resident"
+                        : "Add Resident"}
                   </button>
                 </div>
               </div>
