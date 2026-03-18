@@ -1,0 +1,192 @@
+{
+  "residents": [
+    {
+      "id": "1",
+      "name": "Priya Mehta JSON",
+      "flat": "B-403",
+      "block": "B",
+      "type": "Owner",
+      "phone": "98201 45678",
+      "members": 3,
+      "status": "dues_pending",
+      "email": "priya@email.com"
+    },
+    {
+      "id": "2",
+      "name": "Anil Sharma",
+      "flat": "C-201",
+      "block": "C",
+      "type": "Owner",
+      "phone": "99112 33445",
+      "members": 4,
+      "status": "active",
+      "email": "anil@email.com"
+    },
+    {
+      "id": "3",
+      "name": "Rajesh Kumar",
+      "flat": "A-101",
+      "block": "A",
+      "type": "Tenant",
+      "phone": "87654 12309",
+      "members": 2,
+      "status": "active",
+      "email": "rajesh@email.com"
+    },
+    {
+      "id": "4",
+      "name": "Sunita Joshi",
+      "flat": "D-302",
+      "block": "D",
+      "type": "Owner",
+      "phone": "94551 67890",
+      "members": 5,
+      "status": "overdue",
+      "email": "sunita@email.com"
+    },
+    {
+      "id": "5",
+      "name": "Vikram Desai",
+      "flat": "B-104",
+      "block": "B",
+      "type": "Tenant",
+      "phone": "91234 55678",
+      "members": 2,
+      "status": "active",
+      "email": "vikram@email.com"
+    },
+    {
+      "id": "6",
+      "name": "Kavita Patel",
+      "flat": "C-405",
+      "block": "C",
+      "type": "Owner",
+      "phone": "98765 43210",
+      "members": 3,
+      "status": "dues_pending",
+      "email": "kavita@email.com"
+    },
+    {
+      "id": "7",
+      "name": "Manoj Nair",
+      "flat": "A-202",
+      "block": "A",
+      "type": "Owner",
+      "phone": "93344 55667",
+      "members": 4,
+      "status": "active",
+      "email": "manoj@email.com"
+    },
+    {
+      "id": "8",
+      "name": "Ravi Iyer",
+      "flat": "D-104",
+      "block": "D",
+      "type": "Owner",
+      "phone": "97001 23456",
+      "members": 2,
+      "status": "active",
+      "email": "ravi@email.com"
+    },
+    {
+      "id": "9",
+      "name": "Deepa Rao",
+      "flat": "A-305",
+      "block": "A",
+      "type": "Tenant",
+      "phone": "96780 34512",
+      "members": 3,
+      "status": "active",
+      "email": "deepa@email.com"
+    },
+    {
+      "id": "10",
+      "name": "Suresh Gupta",
+      "flat": "B-202",
+      "block": "B",
+      "type": "Owner",
+      "phone": "91122 33445",
+      "members": 4,
+      "status": "active",
+      "email": "suresh@email.com"
+    },
+    {
+      "id": "18a3",
+      "name": "Umesh chakor",
+      "flat": "22",
+      "block": "",
+      "type": "Owner",
+      "phone": "904926103",
+      "email": "umeshchakor30@gmail.com",
+      "members": 1,
+      "status": "active"
+    },
+    {
+      "id": "72ac",
+      "name": "keri",
+      "flat": "Flat No 22 ",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9049261203",
+      "email": "umeshchakor30@gmail.com",
+      "members": "4",
+      "status": "active"
+    },
+    {
+      "id": "65dc",
+      "name": "Riya sharma",
+      "flat": "Flat no 36",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9049261205",
+      "email": "riya@gmail.com",
+      "members": "6",
+      "status": "active"
+    },
+    {
+      "id": "7894",
+      "name": "Ramsingh",
+      "flat": "Flat no 56",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9045565656",
+      "email": "ramsingh@gmail.com",
+      "members": "2",
+      "status": "Inactive"
+    },
+    {
+      "id": "d115",
+      "name": "Manoj",
+      "flat": "Flat no 88",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9049261203",
+      "email": "manoj@gmail.com",
+      "members": "2",
+      "status": "Active"
+    },
+    {
+      "id": "e1b4",
+      "name": "Raju Major",
+      "flat": "Flat No - 56",
+      "block": "B",
+      "type": "Owner",
+      "phone": "9049261203",
+      "email": "raju@gmail.com",
+      "members": "4",
+      "status": "Active"
+    },
+    {
+      "id": "a02c",
+      "name": "Sneha Yadav",
+      "flat": "45",
+      "block": "A",
+      "type": "Tenant",
+      "phone": "8045123566",
+      "email": "snehay@gmail.com",
+      "members": "2",
+      "status": "Inactive"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
