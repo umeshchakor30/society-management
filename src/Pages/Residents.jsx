@@ -7,6 +7,7 @@ import { CiMobile1 } from "react-icons/ci";
 import toast from "react-hot-toast";
 import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { debounce } from "../Utils/helpers";
 
 const emptyFormData = {
   name: "",
@@ -28,17 +29,6 @@ const validateEmail = (email) => {
 const validatePhone = (phone) => {
   return /^[6-9]\d{9}$/.test(phone);
 };
-
-// For searching we are using the debounce function
-function debounce(fn, delay) {
-  let timer;
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      fn(...args);
-    }, delay);
-  };
-}
 
 const Residents = () => {
   const { state, dispatch } = useApp();
@@ -258,13 +248,13 @@ const Residents = () => {
                   <th className="px-6 py-4 font-semibold text-gray-900">
                     Flat Details
                   </th>
-                  <th className="px-6 py-4 font-semibold text-gray-900 text-center">
+                  <th className="px-6 py-4 font-semibold text-gray-900 text-left">
                     Family
                   </th>
-                  <th className="px-6 py-4 font-semibold text-gray-900 text-right">
+                  <th className="px-6 py-4 font-semibold text-gray-900 text-left">
                     Status
                   </th>
-                  <th className="px-6 py-4 font-semibold text-gray-900 text-right">
+                  <th className="px-6 py-4 font-semibold text-gray-900 text-center">
                     Action
                   </th>
                 </tr>
@@ -272,8 +262,8 @@ const Residents = () => {
               <tbody className="divide-y divide-gray-100">
                 {filterResidensts.map((res, index) => (
                   <tr
-                    className="hover:bg-gray-50/50 transition-colors"
-                    key={res.id + index}
+                    className="hover:bg-gray-50/80 transition-colors group"
+                    key={res.id || index}
                   >
                     {/* 1. Full Name & Contact */}
                     <td className="px-6 py-4">
@@ -320,14 +310,14 @@ const Residents = () => {
                     </td>
 
                     {/* 3. Family Members - Centered */}
-                    <td className="px-6 py-4 text-center font-medium text-gray-700">
+                    <td className="px-6 py-4 text-left font-medium text-gray-700">
                       <span className="bg-gray-100 px-2.5 py-1 rounded-lg text-xs">
                         {res.members} Members
                       </span>
                     </td>
 
                     {/* 4. Status - Right Aligned */}
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-left">
                       <span
                         className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${
                           res.status.toLowerCase() === "active"
@@ -342,7 +332,7 @@ const Residents = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-3">
+                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         {/* Edit Button */}
                         <button
                           title="Edit Resident"
@@ -355,7 +345,7 @@ const Residents = () => {
                         {/* Delete Button */}
                         <button
                           title="Delete Resident"
-                          className="p-2 text-red-600 bg-red-50 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-200 cursor-pointer shadow-sm"
+                          className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all cursor-pointer"
                           onClick={() => handleDelete(res.id)} // Assuming you have a delete handler
                         >
                           <MdDelete size={18} />

@@ -38,8 +38,24 @@ function reducer(state, action) {
         residents: state.residents.filter((res) => res.id !== action.payload),
       };
     }
-    case "ADD_MAINENANCE": {
-      return { ...state, maintenance: [action.payload, ...state.payload] };
+    case "ADD_MAINTENANCE": {
+      return { ...state, maintenance: [action.payload, ...state.maintenance] };
+    }
+    case "UPDATE_MAINTENANCE": {
+      return {
+        ...state,
+        maintenance: state.maintenance.map((item) =>
+          item.id == action.payload.id ? action.payload : item,
+        ),
+      };
+    }
+    case "DELETE_MAINTENANCE": {
+      return {
+        ...state,
+        maintenance: state.maintenance.filter(
+          (item) => item.id !== action.payload,
+        ),
+      };
     }
     default:
       return state;

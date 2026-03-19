@@ -278,24 +278,69 @@
   ],
   "maintenance": [
     {
-      "id": "1",
-      "issue": "Water shortage",
-      "category": "Plumbing",
-      "location": "B-403",
-      "reported": "Mamta",
-      "date": "2026-03-16",
-      "priority": "High",
-      "status": "Open"
-    },
-    {
       "id": "2",
       "issue": "Water shortage",
       "category": "Plumbing",
       "location": "B-403",
       "reported": "Mamta",
       "date": "2026-03-16",
+      "priority": "Low",
+      "status": "Resolved"
+    },
+    {
+      "id": "e4ec",
+      "issue": "Light issue",
+      "category": "Electrical",
+      "location": "In Parking area",
+      "reported": "Rajesh Kumar Mumbai Wale",
+      "date": "",
       "priority": "High",
-      "status": "Open"
+      "status": "In Progress"
+    },
+    {
+      "id": "0ebd",
+      "issue": "Light issue",
+      "category": "Plumbing",
+      "location": "In Parking area",
+      "reported": "Ravi Iyer",
+      "priority": "High",
+      "status": "Pending"
+    },
+    {
+      "id": "77c6",
+      "issue": "Light issue",
+      "category": "Plumbing",
+      "location": "In Parking area",
+      "reported": "keri",
+      "priority": "High",
+      "status": "Pending"
+    },
+    {
+      "id": "9394",
+      "issue": "Light issue",
+      "category": "Plumbing",
+      "location": "In Parking area",
+      "reported": "Deepa Rao",
+      "priority": "High",
+      "status": "In Progress"
+    },
+    {
+      "id": "8497",
+      "issue": "Light issue",
+      "category": "Electrical",
+      "location": "In Parking area",
+      "reported": "Deepa Rao",
+      "priority": "High",
+      "status": "Pending"
+    },
+    {
+      "id": "543d",
+      "issue": "Color Issue",
+      "category": "Housekeeping",
+      "location": "In Lobby",
+      "reported": "Sneha Yadav",
+      "priority": "Medium",
+      "status": "In Progress"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
