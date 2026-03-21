@@ -81,7 +81,6 @@ const Maintenance = () => {
         body: JSON.stringify(form),
       });
 
-      console.log(response);
       if (response.ok) {
         if (editMaintenance) {
           dispatch({

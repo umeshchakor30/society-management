@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { BsLayoutThreeColumns } from "react-icons/bs";
 import { initialResidents } from "../Data/SocietyData";
 import { useApp } from "../Context/AppContext";
@@ -7,7 +7,12 @@ import { CiMobile1 } from "react-icons/ci";
 import toast from "react-hot-toast";
 import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { debounce } from "../Utils/helpers";
+import {
+  debounce,
+  throttle,
+  validateEmail,
+  validatePhone,
+} from "../Utils/helpers";
 
 const emptyFormData = {
   name: "",
@@ -20,16 +25,6 @@ const emptyFormData = {
   status: "Active",
 };
 
-// Validates common email formats (e.g., user@domain.com)
-const validateEmail = (email) => {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-};
-
-// Validates Indian mobile numbers (10 digits starting with 6-9)
-const validatePhone = (phone) => {
-  return /^[6-9]\d{9}$/.test(phone);
-};
-
 const Residents = () => {
   const { state, dispatch } = useApp();
   const { residents } = state;
@@ -40,6 +35,29 @@ const Residents = () => {
   const [inputValue, setInputValue] = useState("");
   const [editResident, setEditResident] = useState(null);
   const [deleteResident, setDeleteResident] = useState();
+  const scrollRef = useRef(null);
+
+  // Infinite scroll state
+  const [visibleCount, setVisibleCount] = useState(10); // Default set value
+
+  const visibleCountRef = useRef(visibleCount);
+
+  // Filer in json array
+  const filterResidensts = residents.filter((res) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      res.name?.toLowerCase().includes(search) ||
+      res.flat?.toLowerCase().includes(search) ||
+      res.phone?.toLowerCase().includes(search)
+    );
+  });
+
+  const totalRef = useRef(filterResidensts.length);
+
+  useEffect(() => {
+    visibleCountRef.current = visibleCount;
+    totalRef.current = filterResidensts.length;
+  }, [visibleCount, filterResidensts.length]);
 
   const handlePopup = (action) => {
     setModel(action);
@@ -135,15 +153,32 @@ const Residents = () => {
     setInputValue(value);
   };
 
-  // Filer in json array
-  const filterResidensts = residents.filter((res) => {
-    const search = searchTerm.toLowerCase();
-    return (
-      res.name?.toLowerCase().includes(search) ||
-      res.flat?.toLowerCase().includes(search) ||
-      res.phone?.toLowerCase().includes(search)
-    );
-  });
+  const displayResidents = filterResidensts.slice(0, visibleCount);
+
+  const handleScroll = useCallback(
+    throttle(() => {
+      if (!scrollRef.current) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+
+      if (scrollTop + clientHeight >= scrollHeight - 20) {
+        setVisibleCount((prev) => prev + 5);
+      }
+    }, []),
+    200,
+  );
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [searchTerm]);
 
   const clearSearch = () => {
     setSearchTerm("");
@@ -237,131 +272,134 @@ const Residents = () => {
 
       {/* Table Container - Constrained width and better shadowing */}
       <div className="max-w-6xl mx-auto">
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left text-sm text-gray-500">
-              <thead className="bg-gray-50/50 border-b border-gray-100">
-                <tr>
-                  <th className="px-6 py-4 font-semibold text-gray-900">
-                    Resident
-                  </th>
-                  <th className="px-6 py-4 font-semibold text-gray-900">
-                    Flat Details
-                  </th>
-                  <th className="px-6 py-4 font-semibold text-gray-900 text-left">
-                    Family
-                  </th>
-                  <th className="px-6 py-4 font-semibold text-gray-900 text-left">
-                    Status
-                  </th>
-                  <th className="px-6 py-4 font-semibold text-gray-900 text-center">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {filterResidensts.map((res, index) => (
-                  <tr
-                    className="hover:bg-gray-50/80 transition-colors group"
-                    key={res.id || index}
-                  >
-                    {/* 1. Full Name & Contact */}
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-gray-900 text-base leading-none">
-                        {res.name}
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="overflow-y-auto h-[500px] border border-gray-200 bg-white rounded-xl shadow-sm relative"
+        >
+          <table className="w-full border-collapse text-left text-sm text-gray-500">
+            <thead className="bg-gray-50 sticky top-0 z-10 border-b border-gray-100">
+              <tr>
+                <th className="px-6 py-4 font-semibold text-gray-900">
+                  Resident
+                </th>
+                <th className="px-6 py-4 font-semibold text-gray-900">
+                  Flat Details
+                </th>
+                <th className="px-6 py-4 font-semibold text-gray-900">
+                  Family
+                </th>
+                <th className="px-6 py-4 font-semibold text-gray-900">
+                  Status
+                </th>
+                <th className="px-6 py-4 font-semibold text-gray-900 text-center">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {displayResidents.map((res, index) => (
+                <tr
+                  className="hover:bg-gray-50/80 transition-colors group"
+                  key={res.id || index}
+                >
+                  {/* 1. Full Name & Contact */}
+                  <td className="px-6 py-4">
+                    <div className="font-semibold text-gray-900 text-base leading-none">
+                      {res.name}
+                    </div>
+                    <div className="mt-2 space-y-1">
+                      <div className="flex items-center text-xs text-gray-500">
+                        <CiMobile1
+                          className="shrink-0 text-gray-400 mr-1.5"
+                          size={14}
+                        />
+                        {res.phone}
                       </div>
-                      <div className="mt-2 space-y-1">
-                        <div className="flex items-center text-xs text-gray-500">
-                          <CiMobile1
-                            className="shrink-0 text-gray-400 mr-1.5"
-                            size={14}
-                          />
-                          {res.phone}
-                        </div>
-                        <div className="flex items-center text-xs text-gray-500">
-                          <MdOutlineEmail
-                            className="shrink-0 text-gray-400 mr-1.5"
-                            size={14}
-                          />
-                          {res.email}
-                        </div>
+                      <div className="flex items-center text-xs text-gray-500">
+                        <MdOutlineEmail
+                          className="shrink-0 text-gray-400 mr-1.5"
+                          size={14}
+                        />
+                        {res.email}
                       </div>
-                    </td>
+                    </div>
+                  </td>
 
-                    {/* 2. Unit Details with Badges */}
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-bold text-gray-900">
-                        {res.flat}
-                      </div>
-                      <div className="mt-1.5 flex gap-1.5">
-                        <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                          Block {res.block}
-                        </span>
-                        <span
-                          className={`inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ring-1 ring-inset ${
-                            res.type === "Owner"
-                              ? "bg-purple-50 text-purple-700 ring-purple-700/10"
-                              : "bg-orange-50 text-orange-700 ring-orange-700/10"
-                          }`}
-                        >
-                          {res.type}
-                        </span>
-                      </div>
-                    </td>
-
-                    {/* 3. Family Members - Centered */}
-                    <td className="px-6 py-4 text-left font-medium text-gray-700">
-                      <span className="bg-gray-100 px-2.5 py-1 rounded-lg text-xs">
-                        {res.members} Members
+                  {/* 2. Unit Details with Badges */}
+                  <td className="px-6 py-4">
+                    <div className="text-sm font-bold text-gray-900">
+                      {res.flat}
+                    </div>
+                    <div className="mt-1.5 flex gap-1.5">
+                      <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                        Block {res.block}
                       </span>
-                    </td>
-
-                    {/* 4. Status - Right Aligned */}
-                    <td className="px-6 py-4 text-left">
                       <span
-                        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${
-                          res.status.toLowerCase() === "active"
-                            ? "bg-green-50 text-green-700"
-                            : "bg-red-50 text-red-700"
+                        className={`inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ring-1 ring-inset ${
+                          res.type === "Owner"
+                            ? "bg-purple-50 text-purple-700 ring-purple-700/10"
+                            : "bg-orange-50 text-orange-700 ring-orange-700/10"
                         }`}
                       >
-                        <span
-                          className={`h-1.5 w-1.5 rounded-full ${res.status.toLowerCase() === "active" ? "bg-green-600" : "bg-red-600"}`}
-                        ></span>
-                        {res.status}
+                        {res.type}
                       </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        {/* Edit Button */}
-                        <button
-                          title="Edit Resident"
-                          className="p-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200 cursor-pointer shadow-sm"
-                          onClick={() => handleEdit(res)}
-                        >
-                          <FaUserEdit size={18} />
-                        </button>
+                    </div>
+                  </td>
 
-                        {/* Delete Button */}
-                        <button
-                          title="Delete Resident"
-                          className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all cursor-pointer"
-                          onClick={() => handleDelete(res.id)} // Assuming you have a delete handler
-                        >
-                          <MdDelete size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {filterResidensts.length === 0 && (
-              <h3 className="text-lg text-gray-900 text-center pt-2 pb-2">
-                No residents found
-              </h3>
-            )}
-          </div>
+                  {/* 3. Family Members - Centered */}
+                  <td className="px-6 py-4 text-left font-medium text-gray-700">
+                    <span className="bg-gray-100 px-2.5 py-1 rounded-lg text-xs">
+                      {res.members} Members
+                    </span>
+                  </td>
+
+                  {/* 4. Status - Right Aligned */}
+                  <td className="px-6 py-4 text-left">
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${
+                        res.status.toLowerCase() === "active"
+                          ? "bg-green-50 text-green-700"
+                          : "bg-red-50 text-red-700"
+                      }`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${res.status.toLowerCase() === "active" ? "bg-green-600" : "bg-red-600"}`}
+                      ></span>
+                      {res.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {/* Edit Button */}
+                      <button
+                        title="Edit Resident"
+                        className="p-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-200 cursor-pointer shadow-sm"
+                        onClick={() => handleEdit(res)}
+                      >
+                        <FaUserEdit size={18} />
+                      </button>
+
+                      {/* Delete Button */}
+                      <button
+                        title="Delete Resident"
+                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all cursor-pointer"
+                        onClick={() => handleDelete(res.id)} // Assuming you have a delete handler
+                      >
+                        <MdDelete size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/* Infinite Scroll Loader */}
+          {visibleCount < filterResidensts.length && (
+            <div className="py-4 text-center text-zinc-400 text-xs animate-pulse">
+              Scroll for more residents...
+            </div>
+          )}
         </div>
       </div>
 
@@ -392,7 +430,6 @@ const Residents = () => {
                       name="name"
                       className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                       value={form.name}
-                      required
                       onChange={(e) =>
                         setForm({ ...form, name: e.target.value })
                       }
@@ -409,7 +446,6 @@ const Residents = () => {
                       placeholder="e.g. A-101"
                       className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-gray-300"
                       value={form.flat}
-                      required
                       onChange={(e) =>
                         setForm({ ...form, flat: e.target.value })
                       }
@@ -423,7 +459,6 @@ const Residents = () => {
                     <select
                       name="block"
                       className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all appearance-none bg- bg-[length:1.25rem] bg-[right_0.75rem_center] bg-no-repeat"
-                      required
                       value={form.block || ""}
                       onChange={(e) =>
                         setForm({ ...form, block: e.target.value })
@@ -461,7 +496,6 @@ const Residents = () => {
                       name="phone"
                       type="text"
                       className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                      required
                       value={form.phone}
                       onChange={(e) =>
                         setForm({ ...form, phone: e.target.value })
@@ -477,7 +511,6 @@ const Residents = () => {
                       name="email"
                       type="email"
                       className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                      required
                       value={form.email}
                       onChange={(e) =>
                         setForm({ ...form, email: e.target.value })
@@ -493,7 +526,6 @@ const Residents = () => {
                       name="members"
                       type="text"
                       className="w-full rounded-lg border border-gray-300 px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                      required
                       maxLength={2}
                       value={form.members}
                       onChange={(e) =>
@@ -524,7 +556,6 @@ const Residents = () => {
                 <div className="mt-10 flex justify-end gap-4">
                   <button
                     className="rounded-lg border border-gray-300 px-8 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all active:scale-95 cursor-pointer"
-                    required
                     onClick={() => setModel(false)}
                   >
                     Cancel

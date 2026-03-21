@@ -28,7 +28,7 @@
       "flat": "A-202",
       "block": "A",
       "type": "Owner",
-      "phone": "93344 55667",
+      "phone": "9334455667",
       "members": 4,
       "status": "active",
       "email": "manoj@email.com"
@@ -39,9 +39,9 @@
       "flat": "D-104",
       "block": "D",
       "type": "Owner",
-      "phone": "97001 23456",
+      "phone": "9700123456",
       "members": 2,
-      "status": "active",
+      "status": "Inactive",
       "email": "ravi@email.com"
     },
     {
@@ -156,13 +156,13 @@
     },
     {
       "id": "1",
-      "name": "Priya Mehta JSON",
+      "name": "Priya Mehta JSON DATA",
       "flat": "B-403",
       "block": "B",
       "type": "Owner",
       "phone": "9820145678",
       "members": 3,
-      "status": "dues_pending",
+      "status": "Active",
       "email": "priya@email.com"
     },
     {
@@ -274,6 +274,39 @@
       "members": 3,
       "status": "Active",
       "email": "priya@email.com"
+    },
+    {
+      "name": "James Anderson",
+      "flat": "Flat No 65",
+      "block": "A",
+      "type": "Owner",
+      "phone": "8045123566",
+      "email": "jams@gmail.com",
+      "members": "6",
+      "status": "Active",
+      "id": "v5uI-Y7cO8Q"
+    },
+    {
+      "name": "Vishwas Rao",
+      "flat": "Flat No - A455",
+      "block": "A",
+      "type": "Tenant",
+      "phone": "9678034512",
+      "email": "vish@gmail.com",
+      "members": "5",
+      "status": "Active",
+      "id": "D7GL8oqjmms"
+    },
+    {
+      "name": "Samu",
+      "flat": "Flat No - A786",
+      "block": "A",
+      "type": "Owner",
+      "phone": "8765412309",
+      "email": "samu@gmail.com",
+      "members": "8",
+      "status": "Active",
+      "id": "y8a5OC18a9Y"
     }
   ],
   "maintenance": [
